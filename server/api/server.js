@@ -47,6 +47,8 @@ app.use((req, res, next) => {
 
 // models
 require("../models/User");
+require("../models/Customer");
+require("../models/Vehicle");
 
 // routes
 app.get("/", (_req, res) => res.send("Car Invoicing API is running"));
@@ -58,6 +60,9 @@ app.use("/user", require("../routes/userRoutes"));
 app.use("/template", require("../routes/templateRoutes"));
 app.use("/invoice", require("../routes/invoiceRoutes"));
 app.use("/ocr", require("../routes/ocrRoutes"));
+app.use("/api/customers", require("../routes/customerRoutes"));
+app.use("/api/vehicles", require("../routes/vehicleRoutes"));
+app.use("/api/dashboard", require("../routes/dashboardRoutes"));
 
 app.post("/ping", (req, res) => res.json({ ok: true, body: req.body || null }));
 

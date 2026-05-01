@@ -5,6 +5,12 @@ const invoiceSchema = new Schema(
   {
     invoiceId: { type: String, unique: true, sparse: true },
     userId: { type: String, required: true },
+    vehicleId: { type: Schema.Types.ObjectId, ref: "Vehicle", sparse: true },
+    workflowStage: {
+      type: String,
+      enum: ["purchase", "customs", "registration", "delivery"],
+      default: "purchase"
+    },
     date: { type: Date, default: Date.now },
     pdfUrl: { type: String, required: true },
     invoiceType: {

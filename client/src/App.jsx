@@ -19,6 +19,12 @@ import AllInvoices from "./components/AllInvoices";
 import Settings from "./components/Settings";
 import Crm from "./components/Crm";
 import CarInvoiceForm from "./components/invoice/CarInvoiceForm";
+import CustomerList from "./components/customers/CustomerList";
+import CustomerForm from "./components/customers/CustomerForm";
+import CustomerDetail from "./components/customers/CustomerDetail";
+import VehicleList from "./components/vehicles/VehicleList";
+import VehicleForm from "./components/vehicles/VehicleForm";
+import VehicleDetail from "./components/vehicles/VehicleDetail";
 
 export const InvoiceContext = createContext();
 
@@ -156,6 +162,16 @@ function AppWrapper() {
 
             <Route path="crm" element={<Crm />} />
             <Route path="settings" element={<Settings />} />
+
+            {/* Customers */}
+            <Route path="customers" element={<CustomerList />} />
+            <Route path="customers/new" element={<CustomerForm />} />
+            <Route path="customers/:customerId" element={<CustomerDetail />} />
+
+            {/* Vehicles */}
+            <Route path="vehicles" element={<VehicleList />} />
+            <Route path="vehicles/new" element={<VehicleForm />} />
+            <Route path="vehicles/:vehicleId" element={<VehicleDetail />} />
           </Route>
 
           {/* Root → protected home */}

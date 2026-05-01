@@ -5,6 +5,11 @@ import {
   SendIcon,
   BoxIcon,
   QuoteIcon,
+  Truck,
+  Users,
+  CheckCircle,
+  Clock,
+  AlertCircle,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 // import axios from "axios";
@@ -22,6 +27,10 @@ function Dashboard({ setGeneratedInvoice }) {
   const [lastMonthInvoices, setLastMonthInvoices] = useState([]);
   const [lastMonthRevenue, setLastMonthRevenue] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState(null);
+  const [pending, setPending] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [stats, setStats] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -97,6 +106,24 @@ function Dashboard({ setGeneratedInvoice }) {
           })
         );
         setLastMonthRevenue(previousRevenue);
+
+        // Fetch vehicle and customer data
+        try {
+          const [summaryRes, pendingRes, activitiesRes, statsRes] = await Promise.all([
+            api.get("/api/dashboard/summary").catch(() => null),
+            api.get("/api/dashboard/pending-actions").catch(() => null),
+            api.get("/api/dashboard/recent-activities").catch(() => null),
+            api.get("/api/dashboard/all-stats").catch(() => null),
+          ]);
+
+          if (summaryRes?.data) setSummary(summaryRes.data.summary);
+          if (pendingRes?.data) setPending(pendingRes.data.pending || []);
+          if (activitiesRes?.data) setActivities(activitiesRes.data.activities || []);
+          if (statsRes?.data) setStats(statsRes.data.stats);
+        } catch (err) {
+          console.error("Error fetching vehicle data:", err);
+        }
+
         setLoading(false);
       } catch (err) {
         if (err.response && err.response.status === 401) {
@@ -192,20 +219,11 @@ function Dashboard({ setGeneratedInvoice }) {
             <span className="hidden md:block text-gray-700 font-medium dark:text-white">
               {user.name}
             </span>
-            {/* <img
-              src={
-                user?.picture
-                  ? user.picture
-                      .replace("=s96-c", "")
-                      .replace("http://", "https://")
-                  : avatar
-              }
-              alt={user.name}
-              className="w-10 h-10 object-cover rounded-full border border-gray-300 "
-            /> */}
           </div>
         )}
       </div>
+
+      {/* Quick Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <Link
           to={`/dashboard/upload`}
@@ -224,23 +242,6 @@ function Dashboard({ setGeneratedInvoice }) {
           </div>
         </Link>
 
-        {/* <Link
-          to={`/dashboard/quotation`}
-          className="bg-green-500 text-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="flex items-center">
-            <div className="bg-white bg-opacity-30 p-3 rounded-full">
-              <QuoteIcon className="w-6 h-6" />
-            </div>
-            <div className="ml-4 text-left">
-              <h3 className="text-xl font-semibold">Create New Quatation</h3>
-              <p className="text-sm text-white text-opacity-90">
-                Create a new quatation for customers
-              </p>
-            </div>
-          </div>
-        </Link> */}
-
         <Link
           to={`/dashboard/templates`}
           className="bg-purple-500 text-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
@@ -257,7 +258,102 @@ function Dashboard({ setGeneratedInvoice }) {
             </div>
           </div>
         </Link>
+
+        <Link
+          to={`/dashboard/vehicles`}
+          className="bg-green-500 text-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+        >
+          <div className="flex items-center">
+            <div className="bg-white bg-opacity-30 p-3 rounded-full">
+              <Truck className="w-6 h-6" />
+            </div>
+            <div className="ml-4 text-left">
+              <h3 className="text-xl font-semibold">Manage Vehicles</h3>
+              <p className="text-sm text-white text-opacity-90">
+                Track vehicle imports
+              </p>
+            </div>
+          </div>
+        </Link>
       </div>
+
+      {/* Vehicle/Customer Metrics */}
+      {stats && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Total Vehicles</p>
+                <p className="text-3xl font-bold">{stats.totalVehicles}</p>
+              </div>
+              <Truck size={40} className="text-blue-600 opacity-20" />
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">In Progress</p>
+                <p className="text-3xl font-bold">{stats.pendingVehicles}</p>
+              </div>
+              <Clock size={40} className="text-yellow-600 opacity-20" />
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Completed</p>
+                <p className="text-3xl font-bold">{stats.completedVehicles}</p>
+              </div>
+              <CheckCircle size={40} className="text-green-600 opacity-20" />
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Health</p>
+                <p className="text-3xl font-bold">{stats.overallHealth}%</p>
+              </div>
+              <AlertCircle size={40} className="text-purple-600 opacity-20" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pending Actions Preview */}
+      {pending.length > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Pending Actions</h2>
+            <Link to="/dashboard/vehicles" className="text-blue-600 hover:text-blue-800 text-sm">
+              View All
+            </Link>
+          </div>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {pending.slice(0, 5).map((item) => (
+              <div
+                key={item.vehicleId}
+                onClick={() => navigate(`/dashboard/vehicles/${item.vehicleId}`)}
+                className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded cursor-pointer hover:shadow-md transition"
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <p className="font-bold text-sm">{item.vehicle}</p>
+                    <p className="text-xs text-gray-500">{item.customer} • {item.currentStage}</p>
+                  </div>
+                  <span className="text-xs px-2 py-1 bg-yellow-200 dark:bg-yellow-800 rounded">
+                    {item.daysPending} days
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recent Invoices Section */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 dark:bg-gray-800 dark:text-white">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-800 dark:text-white">

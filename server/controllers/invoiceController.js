@@ -49,6 +49,8 @@ exports.saveInvoiceDetails = async (req, res) => {
     invoiceDetails,
     priceDetails,
     invoiceType,
+    vehicleId,
+    workflowStage,
   } = req.body;
 
   if (req.userId !== userId) {
@@ -106,6 +108,8 @@ exports.saveInvoiceDetails = async (req, res) => {
     const invoice = new Invoice({
       invoiceId,
       userId,
+      vehicleId,
+      workflowStage: workflowStage || "purchase",
       pdfUrl,
       invoiceType,
       template: {
@@ -167,6 +171,16 @@ exports.saveInvoiceDetails = async (req, res) => {
     });
 
     await invoice.save();
+
+    // If linked to vehicle, update vehicle with invoice reference
+    if (vehicleId) {
+      const Vehicle = require("../models/Vehicle");
+      const vehicle = await Vehicle.findById(vehicleId);
+      if (vehicle && vehicle.userId === userId) {
+        vehicle.purchaseInfo.invoiceId = invoice._id;
+        await vehicle.save();
+      }
+    }
 
     res.status(201).json({ message: "Invoice saved successfully", invoice });
 
