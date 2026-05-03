@@ -155,14 +155,21 @@ export default function VehicleDetail() {
         <div className="space-y-4">
           {Object.entries(stageLabels).map(([stageKey, stageLabel]) => {
             const stageData = vehicle.status.stages[stageKey];
+            const stageStatusOptions = {
+              shipment: ["pending", "in_transit", "completed", "delayed"],
+              customs: ["pending", "under_clearance", "cleared", "on_hold", "rejected"],
+              rmv_registration: ["pending", "in_progress", "completed", "rejected", "resubmission_needed"],
+              delivery: ["pending", "ready", "scheduled", "in_transit", "delivered", "cancelled"]
+            };
+            
             return (
               <div key={stageKey} className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-bold">{stageLabel}</h3>
                   <span className={`px-3 py-1 rounded text-sm font-medium ${
-                    stageData.status === "completed"
+                    stageData.status === "completed" || stageData.status === "cleared" || stageData.status === "delivered"
                       ? "bg-green-100 text-green-800"
-                      : stageData.status === "in-progress"
+                      : stageData.status === "in_transit" || stageData.status === "under_clearance" || stageData.status === "in_progress"
                       ? "bg-blue-100 text-blue-800"
                       : "bg-gray-100 text-gray-800"
                   }`}>
@@ -170,8 +177,21 @@ export default function VehicleDetail() {
                   </span>
                 </div>
                 <div className="space-y-2 text-sm mb-4">
-                  <p><span className="text-gray-500">Start Date:</span> {new Date(stageData.startDate).toLocaleDateString()}</p>
-                  <p><span className="text-gray-500">Est. Date:</span> {new Date(stageData.estimatedDate).toLocaleDateString()}</p>
+                  {stageData.startDate && (
+                    <p><span className="text-gray-500">Start Date:</span> {new Date(stageData.startDate).toLocaleDateString()}</p>
+                  )}
+                  {stageKey === "shipment" && stageData.estimatedArrival && (
+                    <p><span className="text-gray-500">Est. Arrival:</span> {new Date(stageData.estimatedArrival).toLocaleDateString()}</p>
+                  )}
+                  {stageKey === "customs" && stageData.estimatedClearanceDate && (
+                    <p><span className="text-gray-500">Est. Clearance:</span> {new Date(stageData.estimatedClearanceDate).toLocaleDateString()}</p>
+                  )}
+                  {stageKey === "rmv_registration" && stageData.estimatedCompletionDate && (
+                    <p><span className="text-gray-500">Est. Completion:</span> {new Date(stageData.estimatedCompletionDate).toLocaleDateString()}</p>
+                  )}
+                  {stageKey === "delivery" && stageData.scheduledDeliveryDate && (
+                    <p><span className="text-gray-500">Scheduled Delivery:</span> {new Date(stageData.scheduledDeliveryDate).toLocaleDateString()}</p>
+                  )}
                 </div>
                 <select
                   value={stageData.status}
@@ -179,9 +199,10 @@ export default function VehicleDetail() {
                   disabled={saving}
                   className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 mb-2"
                 >
-                  <option value="pending">Pending</option>
-                  <option value="in-progress">In Progress</option>
-                  <option value="completed">Completed</option>
+                  <option value="">-- Select Status --</option>
+                  {(stageStatusOptions[stageKey] || []).map(status => (
+                    <option key={status} value={status}>{status}</option>
+                  ))}
                 </select>
               </div>
             );

@@ -1,0 +1,382 @@
+/* Global Styles for VIMS 2026 Premium UI */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  @apply transition-colors duration-300;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-surface-1;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600;
+}
+
+/* Focus Ring Styles */
+:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-surface-1;
+}
+
+/* Button Focus States */
+button:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-surface-1;
+}
+
+/* Link Styles */
+a {
+  @apply text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors;
+}
+
+a:visited {
+  @apply text-primary-700 dark:text-primary-500;
+}
+
+/* Form Input Focus */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  @apply ring-0 border-primary-500;
+}
+
+/* Placeholder Styling */
+::placeholder {
+  @apply text-gray-400 dark:text-gray-500;
+}
+
+/* Selection Styling */
+::selection {
+  @apply bg-primary-200 dark:bg-primary-900 text-gray-900 dark:text-white;
+}
+
+/* Animations */
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Slide Up Animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Scale In Animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(229, 231, 235) 0%,
+    rgb(243, 244, 246) 50%,
+    rgb(229, 231, 235) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+.dark .animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(45, 55, 72) 0%,
+    rgb(55, 65, 81) 50%,
+    rgb(45, 55, 72) 100%
+  );
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* Spin Animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Status Flash Animation */
+@keyframes statusFlash {
+  0% {
+    background-color: rgba(16, 185, 129, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.animate-status-flash {
+  animation: statusFlash 0.5s ease-out;
+}
+
+/* Gradient Animation */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Hover Effects */
+
+/* Card Hover */
+.hover-card {
+  @apply transition-all duration-300 hover:shadow-level-3 hover:-translate-y-0.5;
+}
+
+/* Button Hover */
+.hover-button {
+  @apply transition-all duration-150 hover:scale-105 active:scale-95;
+}
+
+/* Link Hover */
+.hover-link {
+  @apply transition-colors duration-200 hover:text-primary-700 dark:hover:text-primary-300;
+}
+
+/* Utilities */
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+}
+
+/* Glass Effect */
+.glass-effect {
+  @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white/20 dark:border-slate-700/30;
+}
+
+/* Safe Area */
+.safe-area {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Responsive Typography */
+@media (max-width: 640px) {
+  .display-xl {
+    @apply text-2xl;
+  }
+
+  .display-l {
+    @apply text-xl;
+  }
+
+  .heading-xl {
+    @apply text-lg;
+  }
+
+  .heading-l {
+    @apply text-base;
+  }
+}
+
+/* Dark Mode Specific */
+.dark {
+  color-scheme: dark;
+}
+
+.dark .shadow-level-1 {
+  @apply shadow-dark-level-1;
+}
+
+.dark .shadow-level-2 {
+  @apply shadow-dark-level-2;
+}
+
+.dark .shadow-level-3 {
+  @apply shadow-dark-level-3;
+}
+
+.dark .shadow-level-4 {
+  @apply shadow-dark-level-4;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    @apply bg-white text-gray-900;
+  }
+
+  .no-print {
+    @apply hidden;
+  }
+
+  a {
+    @apply text-primary-600 no-underline;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    @apply !transition-none !animate-none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* Smooth Transitions */
+.transition-smooth {
+  @apply transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Text Overflow */
+.truncate-ellipsis {
+  @apply truncate;
+}
+
+.truncate-2 {
+  @apply line-clamp-2;
+}
+
+.truncate-3 {
+  @apply line-clamp-3;
+}
+
+/* Flex Utilities */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+/* Grid Utilities */
+.grid-auto {
+  @apply grid auto-cols-max;
+}
+
+/* Positioning Utilities */
+.absolute-center {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+/* Backdrop Filter */
+.backdrop-blur-xl {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Performance Optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.gpu-accelerated {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+/* Loading State */
+.skeleton {
+  @apply animate-shimmer;
+}
+
+/* Disabled State */
+.disabled,
+[disabled] {
+  @apply opacity-60 cursor-not-allowed pointer-events-none;
+}

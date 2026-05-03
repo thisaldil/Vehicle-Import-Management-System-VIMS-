@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Eye, Trash2, MapPin } from "lucide-react";
+import { Plus, Eye, Trash2 } from "lucide-react";
 import api from "../../utils/axios";
 
 const stageColors = {
@@ -28,7 +28,7 @@ export default function VehicleList() {
       const params = {
         page,
         limit: 10,
-        ...(filters.stage && { stage: filters.stage }),
+        ...(filters.stage && { status: filters.stage }),
         ...(filters.search && { search: filters.search })
       };
       const res = await api.get("/api/vehicles", { params });
@@ -91,48 +91,70 @@ export default function VehicleList() {
           <p className="text-gray-500">No vehicles found</p>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {vehicles.map((vehicle) => (
-            <div
-              key={vehicle._id}
-              className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow hover:shadow-lg transition"
-            >
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold">
-                    {vehicle.specifications.year} {vehicle.specifications.make} {vehicle.specifications.model}
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    VIN: {vehicle.specifications.vin}
-                  </p>
-                  <div className="mt-3 flex gap-2 items-center">
-                    <span className={`px-3 py-1 rounded text-sm font-medium ${stageColors[vehicle.status.currentStage] || "bg-gray-100"}`}>
-                      {vehicle.status.currentStage}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      <MapPin size={16} className="inline mr-1" />
-                      {vehicle.specifications.color}
-                    </span>
+        <div>
+          <div className="grid gap-4 mb-4">
+            {vehicles.map((vehicle) => (
+              <div
+                key={vehicle._id}
+                className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer"
+                onClick={() => navigate(`/dashboard/vehicles/${vehicle._id}`)}
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold">
+                      {vehicle.specifications?.year} {vehicle.specifications?.make} {vehicle.specifications?.model}
+                    </h3>
+                    <p className="text-sm text-gray-500">VIN: {vehicle.specifications?.vin || "N/A"}</p>
+                    <div className="flex gap-2 mt-2">
+                      <span className={`px-3 py-1 rounded text-sm font-medium ${stageColors[vehicle.status?.currentStage] || "bg-gray-100"}`}>
+                        {vehicle.status?.currentStage || "unknown"}
+                      </span>
+                      <span className="px-3 py-1 rounded text-sm bg-gray-100 text-gray-800">
+                        {vehicle.customerInfo?.customerName || "Unknown Customer"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/dashboard/vehicles/${vehicle._id}`);
+                      }}
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                    >
+                      <Eye size={20} />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(vehicle._id);
+                      }}
+                      className="p-2 text-red-600 hover:bg-red-50 rounded"
+                    >
+                      <Trash2 size={20} />
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => navigate(`/dashboard/vehicles/${vehicle._id}`)}
-                    className="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 dark:hover:bg-blue-900 rounded"
-                  >
-                    <Eye size={20} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(vehicle._id)}
-                    className="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 dark:hover:bg-red-900 rounded"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          
+          <div className="flex justify-center gap-2">
+            {page > 1 && (
+              <button
+                onClick={() => setPage(page - 1)}
+                className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+              >
+                Previous
+              </button>
+            )}
+            <button
+              onClick={() => setPage(page + 1)}
+              className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
     </div>

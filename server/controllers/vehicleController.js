@@ -191,10 +191,10 @@ exports.updateStatus = async (req, res) => {
     });
 
     // Auto advance to next stage if current completed
-    if (status === "completed") {
+    if (status === "completed" && stage !== "delivery") {
       const stageOrder = ["shipment", "customs", "rmv_registration", "delivery"];
       const currentIndex = stageOrder.indexOf(stage);
-      if (currentIndex < stageOrder.length - 1 && stage !== "delivery") {
+      if (currentIndex < stageOrder.length - 1) {
         vehicle.status.currentStage = stageOrder[currentIndex + 1];
       }
     }

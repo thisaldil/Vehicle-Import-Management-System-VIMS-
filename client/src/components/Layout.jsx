@@ -12,8 +12,8 @@ import {
   Users,
   Truck,
 } from "lucide-react";
-import logo from "../images/carquoterlogo.png";
-import darklogo from "../images/carquoterlogo.png";
+import logo from "../images/mainlogo.png";
+import darklogo from "../images/mainlogo.png";
 
 function Layout() {
   const navigate = useNavigate();

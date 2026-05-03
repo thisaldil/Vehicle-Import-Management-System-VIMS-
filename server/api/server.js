@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config({ path: require("path").join(__dirname, ".env") });
 const express = require("express");
 const connectDB = require("../database");
 const crypto = require("crypto");
@@ -49,6 +49,8 @@ app.use((req, res, next) => {
 require("../models/User");
 require("../models/Customer");
 require("../models/Vehicle");
+require("../models/Invoice");
+require("../models/Template");
 
 // routes
 app.get("/", (_req, res) => res.send("Car Invoicing API is running"));

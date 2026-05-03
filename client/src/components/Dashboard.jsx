@@ -284,7 +284,7 @@ function Dashboard({ setGeneratedInvoice }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">Total Vehicles</p>
-                <p className="text-3xl font-bold">{stats.totalVehicles}</p>
+                <p className="text-3xl font-bold">{stats.summary?.totalVehicles || stats.totalVehicles || 0}</p>
               </div>
               <Truck size={40} className="text-blue-600 opacity-20" />
             </div>
@@ -294,7 +294,7 @@ function Dashboard({ setGeneratedInvoice }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">In Progress</p>
-                <p className="text-3xl font-bold">{stats.pendingVehicles}</p>
+                <p className="text-3xl font-bold">{stats.summary ? (stats.summary.shipment + stats.summary.customs + stats.summary.rmv_registration + stats.summary.delivery) : 0}</p>
               </div>
               <Clock size={40} className="text-yellow-600 opacity-20" />
             </div>
@@ -304,7 +304,7 @@ function Dashboard({ setGeneratedInvoice }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">Completed</p>
-                <p className="text-3xl font-bold">{stats.completedVehicles}</p>
+                <p className="text-3xl font-bold">{stats.completedVehicles || 0}</p>
               </div>
               <CheckCircle size={40} className="text-green-600 opacity-20" />
             </div>
@@ -314,7 +314,7 @@ function Dashboard({ setGeneratedInvoice }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-500 text-sm">Health</p>
-                <p className="text-3xl font-bold">{stats.overallHealth}%</p>
+                <p className="text-3xl font-bold">{stats.overallHealth || 0}%</p>
               </div>
               <AlertCircle size={40} className="text-purple-600 opacity-20" />
             </div>
@@ -334,14 +334,14 @@ function Dashboard({ setGeneratedInvoice }) {
           <div className="space-y-2 max-h-48 overflow-y-auto">
             {pending.slice(0, 5).map((item) => (
               <div
-                key={item.vehicleId}
-                onClick={() => navigate(`/dashboard/vehicles/${item.vehicleId}`)}
+                key={item._id}
+                onClick={() => navigate(`/dashboard/vehicles/${item._id}`)}
                 className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded cursor-pointer hover:shadow-md transition"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <p className="font-bold text-sm">{item.vehicle}</p>
-                    <p className="text-xs text-gray-500">{item.customer} • {item.currentStage}</p>
+                    <p className="text-xs text-gray-500">{item.customer} • {item.stage}</p>
                   </div>
                   <span className="text-xs px-2 py-1 bg-yellow-200 dark:bg-yellow-800 rounded">
                     {item.daysPending} days

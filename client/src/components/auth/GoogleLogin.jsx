@@ -61,19 +61,23 @@ const LoginGoogle = ({
 
   if (!clientId) {
     return (
-      <p className="text-sm text-red-600">
-        Google sign-in is not configured.  
-        Set VITE_GOOGLE_CLIENT_ID and rebuild.
+      <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+        Google sign-in is not configured. Set VITE_GOOGLE_CLIENT_ID and rebuild.
       </p>
     );
   }
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <GoogleLogin
-        onSuccess={handleSuccess}
-        onError={() => console.error("Google Login Failed")}
-      />
+      <div className="w-full">
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          onError={() => console.error("Google Login Failed")}
+          theme="filled_white"
+          size="large"
+          width="100%"
+        />
+      </div>
     </GoogleOAuthProvider>
   );
 };

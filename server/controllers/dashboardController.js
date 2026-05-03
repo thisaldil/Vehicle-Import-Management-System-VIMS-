@@ -198,21 +198,53 @@ exports.getStageDurations = async (req, res) => {
 // GET ALL STATS (comprehensive)
 exports.getAllStats = async (req, res) => {
   try {
-    const summary = await this.getSummary({ userId: req.userId }, { json: () => {} });
-    const pending = await Vehicle.find({ userId: req.userId, "status.currentStage": { $ne: "completed" } });
+    const vehicles = await Vehicle.find({ userId: req.userId });
     
+    const summary = {
+      totalVehicles: vehicles.length,
+      shipment: vehicles.filter(v => v.status.currentStage === "shipment").length,
+      customs: vehicles.filter(v => v.status.currentStage === "customs").length,
+      rmv_registration: vehicles.filter(v => v.status.currentStage === "rmv_registration").length,
+      delivery: vehicles.filter(v => v.status.currentStage === "delivery").length,
+      completed: vehicles.filter(v => v.status.currentStage === "completed").length
+    };
+
+    const pending = vehicles
+      .filter(v => v.status.currentStage !== "completed")
+      .map(v => ({
+        _id: v._id,
+        vehicle: `${v.specifications.year} ${v.specifications.make} ${v.specifications.model}`,
+        customer: v.customerInfo.customerName,
+        stage: v.status.currentStage,
+        priority: v.priority,
+        daysPending: Math.floor(
+          (Date.now() - v.status.stages[v.status.currentStage].startDate) / (1000 * 60 * 60 * 24)
+        )
+      }))
+      .sort((a, b) => b.daysPending - a.daysPending)
+      .slice(0, 10);
+
     const invoices = await Invoice.find({ userId: req.userId });
     const monthlyRevenue = invoices
-      .filter(inv => new Date(inv.date).getMonth() === new Date().getMonth())
-      .reduce((sum, inv) => sum + (inv.priceDetails?.totalAmount || 0), 0);
+      .filter(inv => {
+        if (!inv.date) return false;
+        const invDate = new Date(inv.date);
+        const now = new Date();
+        return invDate.getMonth() === now.getMonth() && invDate.getFullYear() === now.getFullYear();
+      })
+      .reduce((sum, inv) => sum + (parseFloat(inv.priceDetails?.totalAmount) || 0), 0);
+
+    const completedCount = vehicles.filter(v => v.completedAt).length;
+    const totalCount = vehicles.length;
+    const overallHealth = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
     const stats = {
-      totalVehicles: await Vehicle.countDocuments({ userId: req.userId }),
-      completedVehicles: await Vehicle.countDocuments({ userId: req.userId, completedAt: { $exists: true } }),
-      pendingVehicles: pending.length,
-      monthlyRevenue,
-      overallHealth: Math.round((await Vehicle.countDocuments({ userId: req.userId, completedAt: { $exists: true } }) / 
-                                await Vehicle.countDocuments({ userId: req.userId })) * 100) || 0
+      summary,
+      pending,
+      monthlyRevenue: Math.round(monthlyRevenue * 100) / 100,
+      overallHealth,
+      completedVehicles: completedCount,
+      totalVehicles: totalCount
     };
 
     res.json({ success: true, stats });
