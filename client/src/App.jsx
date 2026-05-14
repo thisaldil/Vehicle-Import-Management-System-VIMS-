@@ -25,6 +25,9 @@ import CustomerDetail from "./components/customers/CustomerDetail";
 import VehicleList from "./components/vehicles/VehicleList";
 import VehicleForm from "./components/vehicles/VehicleForm";
 import VehicleDetail from "./components/vehicles/VehicleDetail";
+import RMVProcess from "./components/rmv/RMVProcess";
+import RMVStatusTimeline from "./components/rmv/RMVStatusTimeline";
+import DocumentRequirementChecklist from "./components/rmv/DocumentRequirementChecklist";
 
 export const InvoiceContext = createContext();
 
@@ -172,6 +175,11 @@ function AppWrapper() {
             <Route path="vehicles" element={<VehicleList />} />
             <Route path="vehicles/new" element={<VehicleForm />} />
             <Route path="vehicles/:vehicleId" element={<VehicleDetail />} />
+
+            {/* RMV Registration */}
+            <Route path="vehicles/:vehicleId/rmv" element={<RMVProcess />} />
+            <Route path="vehicles/:vehicleId/rmv-status" element={<RMVStatusTimeline />} />
+            <Route path="rmv-guide" element={<DocumentRequirementChecklist />} />
           </Route>
 
           {/* Root → protected home */}

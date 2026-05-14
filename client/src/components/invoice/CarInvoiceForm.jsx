@@ -5,234 +5,10 @@ import {
   getCloudinaryCloudName,
   getCloudinaryUploadPreset,
 } from "../../utils/env";
-
-const MAKES = [
-  "TOYOTA",
-  "NISSAN",
-  "MAZDA",
-  "MITSUBISHI",
-  "HONDA",
-  "SUZUKI",
-  "SUBARU",
-  "ISUZU",
-  "DAIHATSU",
-  "MITSUOKA",
-  "LEXUS",
-  "ALFAROMEO",
-  "ASTON MARTIN",
-  "AUDI",
-  "BENTLEY",
-  "BMW",
-  "BMW ALPINA",
-  "CADILLAC",
-  "CHEVROLET",
-  "CHRYSLER",
-  "CITROEN",
-  "DAIMLER",
-  "DODGE",
-  "FERRARI",
-  "FIAT",
-  "FORD",
-  "FRUEHAUF",
-  "GM",
-  "GMC",
-  "HINO",
-  "HITACHI",
-  "HUMMER",
-  "HYUNDAI",
-  "ISEKI",
-  "JAGUAR",
-  "JEEP",
-  "KAWASAKI",
-  "KOMATSU",
-  "KUBOTA",
-  "LAMBORGHINI",
-  "LANCIA",
-  "LAND ROVER",
-  "LINCOLN",
-  "LOTUS",
-  "MASERATI",
-  "MERCEDES BENZ",
-  "MINI",
-  "MORGAN",
-  "PEUGEOT",
-  "PONTIAC",
-  "PORSCHE",
-  "RENAULT",
-  "ROLLS ROYCE",
-  "ROVER",
-  "SAAB",
-  "SMART",
-  "TADANO",
-  "TCM",
-  "TESLA",
-  "TRAILER",
-  "VOLKSWAGEN",
-  "VOLVO",
-  "WINNEBAGO",
-  "YAMAHA",
-  "YANMAR",
-  "OTHERS",
-];
-
-const MODELS_BY_MAKE = {
-  TOYOTA: [
-    "Corolla",
-    "Camry",
-    "Yaris",
-    "Aqua",
-    "Vitz",
-    "RAV4",
-    "Harrier",
-    "Land Cruiser",
-    "Prado",
-    "Hilux",
-    "Hiace",
-    "Crown",
-    "Premio",
-    "Allion",
-    "Axio",
-  ],
-  NISSAN: [
-    "Note",
-    "March",
-    "Serena",
-    "X-Trail",
-    "Skyline",
-    "Fuga",
-    "Elgrand",
-    "Juke",
-    "Dayz",
-    "Tiida",
-    "Bluebird Sylphy",
-    "NV350 Caravan",
-  ],
-  MAZDA: [
-    "Demio (2)",
-    "Axela (3)",
-    "Atenza (6)",
-    "CX-3",
-    "CX-5",
-    "CX-8",
-    "Roadster (MX-5)",
-    "Bongo",
-  ],
-  MITSUBISHI: [
-    "Outlander",
-    "RVR",
-    "Pajero",
-    "Delica D:5",
-    "EK Wagon",
-    "Lancer",
-    "Mirage",
-  ],
-  HONDA: [
-    "Fit (Jazz)",
-    "Civic",
-    "Accord",
-    "Vezel (HR-V)",
-    "CR-V",
-    "N-BOX",
-    "Freed",
-    "Stepwgn",
-  ],
-  SUZUKI: ["Swift", "Alto", "Wagon R", "Hustler", "Spacia", "Jimny", "Every"],
-  SUBARU: ["Impreza", "Legacy", "Forester", "XV", "Levorg", "Outback", "WRX"],
-  ISUZU: ["Elf", "Forward", "Giga", "D-MAX", "MU-X"],
-  DAIHATSU: ["Mira", "Tanto", "Move", "Hijet", "Rocky", "Copen"],
-  MITSUOKA: ["Viewt", "Himiko", "Galue"],
-  LEXUS: ["IS", "ES", "GS", "LS", "CT", "RX", "NX", "UX", "LX", "GX"],
-  ALFAROMEO: ["Giulietta", "Giulia", "Stelvio", "MiTo"],
-  "ASTON MARTIN": ["Vantage", "DB9", "DB11", "Rapide"],
-  AUDI: ["A3", "A4", "A6", "A8", "Q2", "Q3", "Q5", "Q7", "TT"],
-  BENTLEY: ["Continental GT", "Flying Spur", "Bentayga"],
-  BMW: [
-    "1 Series",
-    "3 Series",
-    "5 Series",
-    "7 Series",
-    "X1",
-    "X3",
-    "X5",
-    "i3",
-    "i8",
-  ],
-  "BMW ALPINA": ["B3", "B5", "B7", "D3"],
-  CADILLAC: ["CTS", "ATS", "Escalade", "XT5"],
-  CHEVROLET: ["Camaro", "Corvette", "Cruze", "Trailblazer"],
-  CHRYSLER: ["300", "Pacifica", "PT Cruiser"],
-  CITROEN: ["C3", "C4", "C5", "Berlingo", "DS3"],
-  DAIMLER: ["XJ", "Super V8"],
-  DODGE: ["Charger", "Challenger", "Durango", "Ram"],
-  FERRARI: ["458", "488", "California", "F8", "Portofino"],
-  FIAT: ["500", "Panda", "Punto", "500X"],
-  FORD: ["Focus", "Fiesta", "Mustang", "Explorer", "Ranger"],
-  FRUEHAUF: ["Trailer"],
-  GM: ["Sierra", "Silverado"],
-  GMC: ["Sierra", "Yukon", "Acadia", "Terrain"],
-  HINO: ["Dutro", "Ranger", "Profia"],
-  HITACHI: ["Excavator", "Wheel Loader"],
-  HUMMER: ["H1", "H2", "H3"],
-  HYUNDAI: ["i10", "i20", "Elantra", "Sonata", "Tucson", "Santa Fe"],
-  ISEKI: ["Tractor", "Combine"],
-  JAGUAR: ["XE", "XF", "XJ", "F-PACE", "E-PACE", "F-TYPE"],
-  JEEP: ["Wrangler", "Cherokee", "Grand Cherokee", "Renegade", "Compass"],
-  KAWASAKI: ["Ninja 250", "Ninja 400", "Z1000", "Versys"],
-  KOMATSU: ["Excavator", "Forklift", "Bulldozer"],
-  KUBOTA: ["Tractor", "Combine", "Excavator"],
-  LAMBORGHINI: ["Huracán", "Aventador", "Urus", "Gallardo"],
-  LANCIA: ["Ypsilon", "Delta", "Thema"],
-  "LAND ROVER": [
-    "Defender",
-    "Discovery",
-    "Range Rover",
-    "Range Rover Sport",
-    "Evoque",
-    "Velar",
-  ],
-  LINCOLN: ["MKZ", "Navigator", "Aviator", "Continental"],
-  LOTUS: ["Elise", "Exige", "Evora", "Emira"],
-  MASERATI: ["Ghibli", "Quattroporte", "Levante", "GranTurismo"],
-  "MERCEDES BENZ": [
-    "A-Class",
-    "C-Class",
-    "E-Class",
-    "S-Class",
-    "GLA",
-    "GLC",
-    "GLE",
-    "GLS",
-    "V-Class",
-  ],
-  MINI: ["One", "Cooper", "Clubman", "Countryman"],
-  MORGAN: ["4/4", "Plus 4", "Plus 8"],
-  PEUGEOT: ["208", "308", "508", "2008", "3008", "5008"],
-  PONTIAC: ["G6", "G8", "Firebird", "Trans Am"],
-  PORSCHE: [
-    "911",
-    "Cayman",
-    "Boxster",
-    "Panamera",
-    "Macan",
-    "Cayenne",
-    "Taycan",
-  ],
-  RENAULT: ["Clio", "Megane", "Talisman", "Captur", "Kadjar"],
-  "ROLLS ROYCE": ["Phantom", "Ghost", "Wraith", "Dawn", "Cullinan"],
-  ROVER: ["25", "45", "75", "Mini (classic)"],
-  SAAB: ["9-3", "9-5", "900"],
-  SMART: ["fortwo", "forfour"],
-  TADANO: ["Rough Terrain Crane", "All Terrain Crane"],
-  TCM: ["Forklift", "Reach Truck"],
-  TESLA: ["Model S", "Model 3", "Model X", "Model Y", "Cybertruck"],
-  TRAILER: ["Flatbed", "Box", "Reefer"],
-  VOLKSWAGEN: ["Polo", "Golf", "Passat", "Tiguan", "Touareg", "Transporter"],
-  VOLVO: ["S60", "S90", "V60", "V90", "XC40", "XC60", "XC90"],
-  WINNEBAGO: ["Brave", "Travato", "View"],
-  YAMAHA: ["YZF-R3", "MT-07", "MT-09", "NMAX"],
-  YANMAR: ["Tractor", "Combine Harvester"],
-  OTHERS: ["Other"],
-};
+import {
+  VEHICLE_MAKES,
+  VEHICLE_MODELS_BY_MAKE,
+} from "../vehicles/vehicleCatalog";
 
 export default function CarInvoiceForm({ onSave }) {
   const cloudinaryUploadSeq = useRef(0);
@@ -284,7 +60,10 @@ export default function CarInvoiceForm({ onSave }) {
   const [selectedModel, setSelectedModel] = useState("");
 
   // Get available models for selected make
-  const availableModels = selectedMake ? MODELS_BY_MAKE[selectedMake] || [] : [];
+  const availableModels = useMemo(
+    () => (selectedMake ? VEHICLE_MODELS_BY_MAKE[selectedMake] || [] : []),
+    [selectedMake]
+  );
 
   // Handle make selection
   const handleMakeChange = (e) => {
@@ -475,9 +254,9 @@ export default function CarInvoiceForm({ onSave }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 p-8 text-gray-800 dark:text-gray-100 transition-colors">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">
           Car Invoice Form
         </h1>
 
@@ -486,20 +265,20 @@ export default function CarInvoiceForm({ onSave }) {
           {/* Left Side - Tables (2 columns on lg screens) */}
           <div className="lg:col-span-2 space-y-6">
             {/* Table 1: Vehicle Information */}
-            <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-700 mb-4 border-b-2 border-blue-500 pb-2">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-dark-level-3 p-6 border border-gray-200 dark:border-slate-700 transition-colors">
+              <h2 className="text-xl font-bold text-gray-700 dark:text-gray-100 mb-4 border-b-2 border-blue-500 pb-2">
                 Vehicle Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Invoice ID (Auto-generated) */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Invoice ID (Auto-generated)
                   </label>
                   <input
                     type="text"
                     value={invoiceData.invoiceId}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50 font-mono text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-blue-50 dark:bg-slate-800 font-mono text-sm text-gray-800 dark:text-gray-100"
                     placeholder="Auto-generated Invoice ID"
                     readOnly
                   />
@@ -507,16 +286,16 @@ export default function CarInvoiceForm({ onSave }) {
 
                 {/* Make Dropdown */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Vehicle Make
                   </label>
                   <select
                     value={selectedMake}
                     onChange={handleMakeChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                   >
                     <option value="">-- Select Make --</option>
-                    {MAKES.map((make) => (
+                    {VEHICLE_MAKES.map((make) => (
                       <option key={make} value={make}>
                         {make}
                       </option>
@@ -526,14 +305,14 @@ export default function CarInvoiceForm({ onSave }) {
 
                 {/* Model Dropdown */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Vehicle Model
                   </label>
                   <select
                     value={selectedModel}
                     onChange={handleModelChange}
                     disabled={!selectedMake}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-slate-900 disabled:cursor-not-allowed"
                   >
                     <option value="">-- Select Model --</option>
                     {availableModels.map((model) => (
@@ -546,7 +325,7 @@ export default function CarInvoiceForm({ onSave }) {
 
                 {/* Vehicle Name (Auto-filled) */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Vehicle Name (Auto-filled)
                   </label>
                   <input
@@ -554,14 +333,14 @@ export default function CarInvoiceForm({ onSave }) {
                     name="vehicleName"
                     value={invoiceData.vehicleName}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-blue-50 dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="Auto-filled from Make & Model"
                     readOnly
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Vehicle Grade
                   </label>
                   <input
@@ -569,19 +348,19 @@ export default function CarInvoiceForm({ onSave }) {
                     name="vehicleGrade"
                     value={invoiceData.vehicleGrade}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="Enter vehicle grade"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Vehicle Type
                   </label>
                   <select
                     name="vehicleType"
                     value={invoiceData.vehicleType}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                   >
                     <option value="">-- Select Type --</option>
                     <option value="Car/Suv">Car/Suv</option>
@@ -590,20 +369,20 @@ export default function CarInvoiceForm({ onSave }) {
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Details
                   </label>
                   <textarea
                     name="details"
                     value={invoiceData.details}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="Enter vehicle details"
                     rows="3"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Mileage
                   </label>
                   <input
@@ -611,12 +390,12 @@ export default function CarInvoiceForm({ onSave }) {
                     name="mileage"
                     value={invoiceData.mileage}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="e.g., 50000 km"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Year
                   </label>
                   <input
@@ -624,19 +403,19 @@ export default function CarInvoiceForm({ onSave }) {
                     name="year"
                     value={invoiceData.year}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="e.g., 2020"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Fuel Type
                   </label>
                   <select
                     name="fuelType"
                     value={invoiceData.fuelType}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                   >
                     <option value="">-- Select Fuel --</option>
                     <option value="Petrol">Petrol</option>
@@ -647,7 +426,7 @@ export default function CarInvoiceForm({ onSave }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Engine CC
                   </label>
                   <input
@@ -655,7 +434,7 @@ export default function CarInvoiceForm({ onSave }) {
                     name="engineCC"
                     value={invoiceData.engineCC}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="e.g., 1500"
                   />
                 </div>
@@ -665,12 +444,12 @@ export default function CarInvoiceForm({ onSave }) {
             {/* Table 2: Date & Custom Duty Breakdown */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Date Section */}
-              <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                <h2 className="text-lg font-bold text-gray-700 mb-4 border-b-2 border-green-500 pb-2">
+              <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-dark-level-3 p-6 border border-gray-200 dark:border-slate-700 transition-colors">
+                <h2 className="text-lg font-bold text-gray-700 dark:text-gray-100 mb-4 border-b-2 border-green-500 pb-2">
                   Date
                 </h2>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Report Date
                   </label>
                   <input
@@ -678,63 +457,63 @@ export default function CarInvoiceForm({ onSave }) {
                     name="reportDate"
                     value={invoiceData.reportDate}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                   />
                 </div>
               </div>
 
               {/* Custom Duty Breakdown */}
-              <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                <h2 className="text-lg font-bold text-gray-700 mb-4 border-b-2 border-orange-500 pb-2">
+              <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-dark-level-3 p-6 border border-gray-200 dark:border-slate-700 transition-colors">
+                <h2 className="text-lg font-bold text-gray-700 dark:text-gray-100 mb-4 border-b-2 border-orange-500 pb-2">
                   Custom Duty Breakdown
                 </h2>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-semibold text-gray-700">CID (20%):</span>
-                    <span className="bg-gray-100 px-3 py-1 rounded text-gray-800">
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">CID (20%):</span>
+                    <span className="bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded text-gray-800 dark:text-gray-100">
                       {invoiceData.cid.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-semibold text-gray-700">
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">
                       Surcharge (50% of CID):
                     </span>
-                    <span className="bg-gray-100 px-3 py-1 rounded text-gray-800">
+                    <span className="bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded text-gray-800 dark:text-gray-100">
                       {invoiceData.surcharge.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-semibold text-gray-700">XID (CC × 3450):</span>
-                    <span className="bg-gray-100 px-3 py-1 rounded text-gray-800">
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">XID (CC × 3450):</span>
+                    <span className="bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded text-gray-800 dark:text-gray-100">
                       {invoiceData.xid.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-semibold text-gray-700">
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">
                       VEL (15,000 LKR):
                     </span>
-                    <span className="bg-gray-100 px-3 py-1 rounded text-gray-800">
+                    <span className="bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded text-gray-800 dark:text-gray-100">
                       {invoiceData.luxuryTax.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-semibold text-gray-700">VAT (18%):</span>
-                    <span className="bg-gray-100 px-3 py-1 rounded text-gray-800">
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">VAT (18%):</span>
+                    <span className="bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded text-gray-800 dark:text-gray-100">
                       {invoiceData.vat.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-semibold text-gray-700">
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">
                       COM/EXM/SEL (1,750 LKR):
                     </span>
-                    <span className="bg-gray-100 px-3 py-1 rounded text-gray-800">
+                    <span className="bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded text-gray-800 dark:text-gray-100">
                       {invoiceData.vetAndCom.toFixed(2)}
                     </span>
                   </div>
                   <hr className="my-2" />
                   <div className="flex justify-between items-center font-bold">
-                    <span className="text-gray-800">Total Duty:</span>
-                    <span className="bg-orange-100 px-3 py-1 rounded text-orange-700">
+                    <span className="text-gray-800 dark:text-gray-100">Total Duty:</span>
+                    <span className="bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded text-orange-700 dark:text-orange-300">
                       {invoiceData.totalDuty.toFixed(2)}
                     </span>
                   </div>
@@ -743,12 +522,12 @@ export default function CarInvoiceForm({ onSave }) {
             </div>
 
             {/* Table 3: Price Section (Full Width) */}
-            <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-dark-level-3 p-6 border border-gray-200 dark:border-slate-700 transition-colors">
               <div className="flex items-start justify-between mb-4 border-b-2 border-purple-500 pb-2">
-                <h2 className="text-xl font-bold text-gray-700">
+                <h2 className="text-xl font-bold text-gray-700 dark:text-gray-100">
                   Price Section
                 </h2>
-                <div className="text-xs text-red-600 text-right leading-snug">
+                <div className="text-xs text-red-600 dark:text-red-300 text-right leading-snug">
                   <div className="font-semibold">Selection order:</div>
                   <div>1) Select currency</div>
                   <div>2) Rate</div>
@@ -757,14 +536,14 @@ export default function CarInvoiceForm({ onSave }) {
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Currency
                   </label>
                   <select
                     name="currency"
                     value={invoiceData.currency}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                   >
                     <option value="JPY">JPY (¥)</option>
                     <option value="USD">USD ($)</option>
@@ -773,7 +552,7 @@ export default function CarInvoiceForm({ onSave }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     {invoiceData.currency} to LKR Rate
                   </label>
                   <input
@@ -782,12 +561,12 @@ export default function CarInvoiceForm({ onSave }) {
                     value={invoiceData.currencyRate}
                     onChange={handleCurrencyRateChange}
                     step="0.01"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="2"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Price ({invoiceData.currency})
                   </label>
                   <input
@@ -795,46 +574,46 @@ export default function CarInvoiceForm({ onSave }) {
                     name="priceValue"
                     value={invoiceData.priceValue}
                     onChange={handlePriceValueChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Price (LKR)
                   </label>
-                  <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 flex items-center">
-                    <span className="text-gray-700 font-semibold">
+                  <div className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-gray-50 dark:bg-slate-800 flex items-center">
+                    <span className="text-gray-700 dark:text-gray-100 font-semibold">
                       {invoiceData.priceLkr.toFixed(2)}
                     </span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Total Customs Duty
                   </label>
-                  <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 flex items-center">
-                    <span className="text-gray-700 font-semibold">
+                  <div className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-gray-50 dark:bg-slate-800 flex items-center">
+                    <span className="text-gray-700 dark:text-gray-100 font-semibold">
                       {invoiceData.totalCustomsDuty.toFixed(2)}
                     </span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Clearing Charges
                   </label>
-                  <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 flex items-center">
-                    <span className="text-gray-700 font-semibold">
+                  <div className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-gray-50 dark:bg-slate-800 flex items-center">
+                    <span className="text-gray-700 dark:text-gray-100 font-semibold">
                       {invoiceData.clearingCharges.toFixed(2)}
                     </span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                     Total Price
                   </label>
-                  <div className="w-full px-3 py-2 border border-2 border-purple-500 rounded-md bg-purple-50 flex items-center">
-                    <span className="text-purple-700 font-bold text-lg">
+                  <div className="w-full px-3 py-2 border border-2 border-purple-500 dark:border-purple-400 rounded-md bg-purple-50 dark:bg-purple-950/50 flex items-center">
+                    <span className="text-purple-700 dark:text-purple-300 font-bold text-lg">
                       {invoiceData.totalPriceApprox.toFixed(2)}
                     </span>
                   </div>
@@ -845,8 +624,8 @@ export default function CarInvoiceForm({ onSave }) {
 
           {/* Right Side - Image Section */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 sticky top-8">
-              <h2 className="text-xl font-bold text-gray-700 mb-4 border-b-2 border-red-500 pb-2">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-dark-level-3 p-6 border border-gray-200 dark:border-slate-700 sticky top-8 transition-colors">
+              <h2 className="text-xl font-bold text-gray-700 dark:text-gray-100 mb-4 border-b-2 border-red-500 pb-2">
                 Image Section
               </h2>
 
@@ -857,8 +636,8 @@ export default function CarInvoiceForm({ onSave }) {
                 onDrop={handleDrop}
                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${
                   dragActive
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-300 bg-gray-50 hover:border-gray-400"
+                    ? "border-blue-500 bg-blue-50 dark:bg-slate-800"
+                    : "border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-800 hover:border-gray-400 dark:hover:border-slate-500"
                 }`}
               >
                 <input
@@ -879,14 +658,14 @@ export default function CarInvoiceForm({ onSave }) {
                         alt="Vehicle"
                         className="w-full h-64 object-cover rounded-md mb-3"
                       />
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
                         Click to change image
                       </p>
                     </div>
                   ) : (
                     <div>
                       <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
+                        className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
                         stroke="currentColor"
                         fill="none"
                         viewBox="0 0 48 48"
@@ -898,7 +677,7 @@ export default function CarInvoiceForm({ onSave }) {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      <p className="mt-2 text-sm text-gray-600">
+                      <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                         Drag and drop an image here, or click to select
                       </p>
                     </div>
@@ -908,7 +687,7 @@ export default function CarInvoiceForm({ onSave }) {
 
               {/* Image URL Option */}
               <div className="mt-4">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   Or paste Image URL
                 </label>
                 <input
@@ -921,7 +700,7 @@ export default function CarInvoiceForm({ onSave }) {
                       vehicleImageUrl: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100"
                   placeholder="https://example.com/image.jpg"
                 />
               </div>
@@ -941,7 +720,7 @@ export default function CarInvoiceForm({ onSave }) {
         <div className="flex justify-end mt-12">
           <button
             onClick={handleSave}
-            className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md"
+            className="px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 dark:hover:bg-blue-400 transition-all shadow-md dark:shadow-dark-level-2"
           >
             Save Invoice
           </button>

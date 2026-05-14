@@ -51,6 +51,7 @@ require("../models/Customer");
 require("../models/Vehicle");
 require("../models/Invoice");
 require("../models/Template");
+require("../models/RMVRegistration");
 
 // routes
 app.get("/", (_req, res) => res.send("Car Invoicing API is running"));
@@ -64,6 +65,7 @@ app.use("/invoice", require("../routes/invoiceRoutes"));
 app.use("/ocr", require("../routes/ocrRoutes"));
 app.use("/api/customers", require("../routes/customerRoutes"));
 app.use("/api/vehicles", require("../routes/vehicleRoutes"));
+app.use("/api/rmv", require("../routes/rmvRoutes"));
 app.use("/api/dashboard", require("../routes/dashboardRoutes"));
 
 app.post("/ping", (req, res) => res.json({ ok: true, body: req.body || null }));

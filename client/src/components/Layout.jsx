@@ -24,6 +24,7 @@ function Layout() {
     { path: "/dashboard", label: "Dashboard", icon: HomeIcon },
     { path: "/dashboard/customers", label: "Customers", icon: Users },
     { path: "/dashboard/vehicles", label: "Vehicles", icon: Truck },
+    { path: "/dashboard/rmv-guide", label: "RMV Guide", icon: FileTextIcon },
     { path: "/dashboard/upload", label: "Car Invoice", icon: FileTextIcon },
     { path: "/dashboard/templates", label: "Templates", icon: BoxIcon },
     { path: "/dashboard/invoices", label: "All Invoices", icon: FilesIcon },

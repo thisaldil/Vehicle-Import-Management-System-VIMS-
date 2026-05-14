@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Save, ArrowLeft } from "lucide-react";
 import api from "../../utils/axios";
+import {
+  VEHICLE_BODY_TYPES,
+  VEHICLE_MAKES,
+  VEHICLE_MODELS_BY_MAKE,
+} from "./vehicleCatalog";
 
 export default function VehicleForm() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const customerId = searchParams.get("customerId");
   const [saving, setSaving] = useState(false);
+  const [makeOptions, setMakeOptions] = useState(VEHICLE_MAKES);
+  const [modelOptionsByMake, setModelOptionsByMake] = useState(
+    VEHICLE_MODELS_BY_MAKE
+  );
+  const [showCustomMakeInput, setShowCustomMakeInput] = useState(false);
+  const [showCustomModelInput, setShowCustomModelInput] = useState(false);
+  const [customMake, setCustomMake] = useState("");
+  const [customModel, setCustomModel] = useState("");
 
   const [formData, setFormData] = useState({
     customerId: customerId || "",
@@ -32,11 +45,56 @@ export default function VehicleForm() {
     }
   });
 
+  const selectedMake = formData.specifications.make;
+  const selectedModel = formData.specifications.model;
+
+  const availableModels = useMemo(() => {
+    if (!selectedMake) return [];
+    return modelOptionsByMake[selectedMake] || [];
+  }, [modelOptionsByMake, selectedMake]);
+
+  const makeSelectValue = showCustomMakeInput
+    ? "__custom__"
+    : makeOptions.includes(selectedMake)
+      ? selectedMake
+      : "";
+
+  const modelSelectValue = showCustomModelInput
+    ? "__custom__"
+    : availableModels.includes(selectedModel)
+      ? selectedModel
+      : "";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSaving(true);
-      await api.post("/api/vehicles", formData);
+      
+      // Validate customerId
+      if (!formData.customerId) {
+        alert("Please select a customer first. Go to Customers and create one, then add a vehicle from the customer page.");
+        setSaving(false);
+        return;
+      }
+
+      const pendingMake = showCustomMakeInput ? customMake.trim().toUpperCase() : "";
+      const pendingModel = showCustomModelInput ? customModel.trim() : "";
+      const payload = {
+        ...formData,
+        specifications: {
+          ...formData.specifications,
+          make: pendingMake || formData.specifications.make,
+          model: pendingModel || formData.specifications.model,
+        },
+      };
+
+      if (!payload.specifications.make || !payload.specifications.model) {
+        alert("Please select or add both a make and model.");
+        setSaving(false);
+        return;
+      }
+
+      await api.post("/api/vehicles", payload);
       alert("Vehicle created successfully");
       navigate("/dashboard/vehicles");
     } catch (err) {
@@ -48,13 +106,118 @@ export default function VehicleForm() {
   };
 
   const handleNestedChange = (section, field, value) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [section]: {
-        ...formData[section],
-        [field]: value
+        ...prev[section],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleMakeSelect = (value) => {
+    if (value === "__custom__") {
+      setShowCustomMakeInput(true);
+      setCustomMake(selectedMake || "");
+      setShowCustomModelInput(false);
+      setCustomModel("");
+      setFormData((prev) => ({
+        ...prev,
+        specifications: {
+          ...prev.specifications,
+          make: "",
+          model: "",
+        },
+      }));
+      return;
+    }
+
+    setShowCustomMakeInput(false);
+    setCustomMake("");
+    setShowCustomModelInput(false);
+    setCustomModel("");
+    setFormData((prev) => ({
+      ...prev,
+      specifications: {
+        ...prev.specifications,
+        make: value,
+        model: "",
+      },
+    }));
+  };
+
+  const handleModelSelect = (value) => {
+    if (value === "__custom__") {
+      setShowCustomModelInput(true);
+      setCustomModel(selectedModel || "");
+      setFormData((prev) => ({
+        ...prev,
+        specifications: {
+          ...prev.specifications,
+          model: "",
+        },
+      }));
+      return;
+    }
+
+    setShowCustomModelInput(false);
+    setCustomModel("");
+    setFormData((prev) => ({
+      ...prev,
+      specifications: {
+        ...prev.specifications,
+        model: value,
+      },
+    }));
+  };
+
+  const addCustomMake = () => {
+    const make = customMake.trim().toUpperCase();
+    if (!make) return;
+
+    setMakeOptions((prev) => (prev.includes(make) ? prev : [...prev, make]));
+    setModelOptionsByMake((prev) =>
+      prev[make] ? prev : { ...prev, [make]: [] }
+    );
+    setFormData((prev) => ({
+      ...prev,
+      specifications: {
+        ...prev.specifications,
+        make,
+        model: "",
+      },
+    }));
+    setShowCustomMakeInput(false);
+    setCustomMake("");
+    setShowCustomModelInput(false);
+    setCustomModel("");
+  };
+
+  const addCustomModel = () => {
+    const model = customModel.trim();
+    if (!model || !selectedMake) return;
+
+    setModelOptionsByMake((prev) => {
+      const existingModels = prev[selectedMake] || [];
+      if (existingModels.includes(model)) {
+        return prev;
       }
+
+      return {
+        ...prev,
+        [selectedMake]: [...existingModels, model],
+      };
     });
+
+    setFormData((prev) => ({
+      ...prev,
+      specifications: {
+        ...prev.specifications,
+        model,
+      },
+    }));
+    setShowCustomModelInput(false);
+    setCustomModel("");
   };
 
   return (
@@ -73,26 +236,77 @@ export default function VehicleForm() {
           {/* Specifications */}
           <div>
             <h3 className="text-lg font-bold mb-4">Specifications</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Make *</label>
-                <input
-                  type="text"
+                <select
                   required
-                  value={formData.specifications.make}
-                  onChange={(e) => handleNestedChange("specifications", "make", e.target.value)}
+                  value={makeSelectValue}
+                  onChange={(e) => handleMakeSelect(e.target.value)}
                   className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700"
-                />
+                >
+                  <option value="">Select a make</option>
+                  {makeOptions.map((make) => (
+                    <option key={make} value={make}>
+                      {make}
+                    </option>
+                  ))}
+                  <option value="__custom__">+ Add custom make</option>
+                </select>
+                {showCustomMakeInput && (
+                  <div className="mt-2 flex gap-2">
+                    <input
+                      type="text"
+                      value={customMake}
+                      onChange={(e) => setCustomMake(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700"
+                      placeholder="Type a new make"
+                    />
+                    <button
+                      type="button"
+                      onClick={addCustomMake}
+                      className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                      Add
+                    </button>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Model *</label>
-                <input
-                  type="text"
+                <select
                   required
-                  value={formData.specifications.model}
-                  onChange={(e) => handleNestedChange("specifications", "model", e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700"
-                />
+                  value={modelSelectValue}
+                  onChange={(e) => handleModelSelect(e.target.value)}
+                  disabled={!selectedMake}
+                  className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-100"
+                >
+                  <option value="">Select a model</option>
+                  {availableModels.map((model) => (
+                    <option key={model} value={model}>
+                      {model}
+                    </option>
+                  ))}
+                  <option value="__custom__">+ Add custom model</option>
+                </select>
+                {showCustomModelInput && (
+                  <div className="mt-2 flex gap-2">
+                    <input
+                      type="text"
+                      value={customModel}
+                      onChange={(e) => setCustomModel(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700"
+                      placeholder="Type a new model"
+                    />
+                    <button
+                      type="button"
+                      onClick={addCustomModel}
+                      className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                      Add
+                    </button>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Year *</label>
@@ -156,6 +370,21 @@ export default function VehicleForm() {
                 >
                   <option value="manual">Manual</option>
                   <option value="automatic">Automatic</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Body Type *</label>
+                <select
+                  required
+                  value={formData.specifications.bodyType}
+                  onChange={(e) => handleNestedChange("specifications", "bodyType", e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700"
+                >
+                  {VEHICLE_BODY_TYPES.map((bodyType) => (
+                    <option key={bodyType} value={bodyType}>
+                      {bodyType.charAt(0).toUpperCase() + bodyType.slice(1)}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
