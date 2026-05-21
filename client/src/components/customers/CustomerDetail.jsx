@@ -66,7 +66,7 @@ export default function CustomerDetail() {
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
         <h2 className="text-2xl font-bold mb-6">Customer Details</h2>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           <div>
             <label className="block text-sm font-medium mb-2">Name</label>
             <input
@@ -143,7 +143,7 @@ export default function CustomerDetail() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded flex items-center gap-2"
+          className="mt-6 w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded flex items-center justify-center gap-2"
         >
           <Save size={20} /> {saving ? "Saving..." : "Save"}
         </button>
@@ -153,7 +153,7 @@ export default function CustomerDetail() {
         <h3 className="text-xl font-bold mb-4">Vehicles</h3>
         <button
           onClick={() => navigate(`/dashboard/vehicles/new?customerId=${customerId}`)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
         >
           Add Vehicle
         </button>

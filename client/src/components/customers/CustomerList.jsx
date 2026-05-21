@@ -40,11 +40,11 @@ export default function CustomerList() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Customers</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold">Customers</h1>
         <button
           onClick={() => navigate("/dashboard/customers/new")}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center justify-center gap-2"
         >
           <Plus size={20} /> New Customer
         </button>
@@ -67,26 +67,26 @@ export default function CustomerList() {
           <p className="text-gray-500">No customers found</p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow">
-          <table className="w-full">
+        <div className="bg-white dark:bg-gray-800 rounded-lg overflow-x-auto shadow">
+          <table className="min-w-[720px] w-full">
             <thead className="bg-gray-100 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left">Name</th>
-                <th className="px-6 py-3 text-left">Email</th>
-                <th className="px-6 py-3 text-left">Phone</th>
-                <th className="px-6 py-3 text-left">Vehicles</th>
-                <th className="px-6 py-3 text-left">Status</th>
-                <th className="px-6 py-3 text-left">Actions</th>
+                <th className="px-4 py-3 text-left sm:px-6">Name</th>
+                <th className="px-4 py-3 text-left sm:px-6">Email</th>
+                <th className="px-4 py-3 text-left sm:px-6">Phone</th>
+                <th className="px-4 py-3 text-left sm:px-6">Vehicles</th>
+                <th className="px-4 py-3 text-left sm:px-6">Status</th>
+                <th className="px-4 py-3 text-left sm:px-6">Actions</th>
               </tr>
             </thead>
             <tbody>
               {customers.map((customer) => (
                 <tr key={customer._id} className="border-t dark:border-gray-700">
-                  <td className="px-6 py-4 font-medium">{customer.name}</td>
-                  <td className="px-6 py-4">{customer.email}</td>
-                  <td className="px-6 py-4">{customer.phone}</td>
-                  <td className="px-6 py-4">{customer.vehicleCount || 0}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4 font-medium sm:px-6">{customer.name}</td>
+                  <td className="px-4 py-4 sm:px-6">{customer.email}</td>
+                  <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
+                  <td className="px-4 py-4 sm:px-6">{customer.vehicleCount || 0}</td>
+                  <td className="px-4 py-4 sm:px-6">
                     <span className={`px-3 py-1 rounded-full text-sm ${
                       customer.status === "active"
                         ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
@@ -95,7 +95,7 @@ export default function CustomerList() {
                       {customer.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 flex gap-2">
+                  <td className="px-4 py-4 flex gap-2 sm:px-6">
                     <button
                       onClick={() => navigate(`/dashboard/customers/${customer._id}`)}
                       className="text-blue-600 hover:text-blue-800"

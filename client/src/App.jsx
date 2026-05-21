@@ -65,7 +65,7 @@ function AppWrapper() {
         setSelectedTemplate,
       }}
     >
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
+      <div className="min-h-screen overflow-x-hidden bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
         <Toaster position="top-center" />
         <Routes>
           {/* Public */}

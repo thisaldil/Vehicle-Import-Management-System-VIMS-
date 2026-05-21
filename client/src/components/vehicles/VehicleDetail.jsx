@@ -73,7 +73,7 @@ export default function VehicleDetail() {
         <p className="text-sm text-gray-400 mt-1">ID: {vehicle._id}</p>
       </div>
 
-      <div className="flex gap-2 mb-6 border-b dark:border-gray-700">
+        <div className="flex gap-2 mb-6 border-b dark:border-gray-700 overflow-x-auto whitespace-nowrap pb-1">
         {["details", "timeline", "stages"].map((tab) => (
           <button
             key={tab}
@@ -90,7 +90,7 @@ export default function VehicleDetail() {
       </div>
 
       {activeTab === "details" && (
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
             <h3 className="text-xl font-bold mb-4">Specifications</h3>
             <div className="space-y-3">
@@ -164,7 +164,7 @@ export default function VehicleDetail() {
             
             return (
               <div key={stageKey} className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
                   <h3 className="text-lg font-bold">{stageLabel}</h3>
                   <span className={`px-3 py-1 rounded text-sm font-medium ${
                     stageData.status === "completed" || stageData.status === "cleared" || stageData.status === "delivered"

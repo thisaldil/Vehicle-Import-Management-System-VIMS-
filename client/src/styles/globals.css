@@ -10,6 +10,23 @@ html {
   scroll-behavior: smooth;
 }
 
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;

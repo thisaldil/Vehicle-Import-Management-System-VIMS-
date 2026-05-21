@@ -52,28 +52,28 @@ export default function VehicleList() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Vehicles</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold">Vehicles</h1>
         <button
           onClick={() => navigate("/dashboard/vehicles/new")}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center justify-center gap-2"
         >
           <Plus size={20} /> New Vehicle
         </button>
       </div>
 
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
         <input
           type="text"
           placeholder="Search by VIN, make, or model..."
           value={filters.search}
           onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-          className="flex-1 px-4 py-2 border rounded-lg bg-white dark:bg-gray-800"
+          className="w-full flex-1 px-4 py-2 border rounded-lg bg-white dark:bg-gray-800"
         />
         <select
           value={filters.stage}
           onChange={(e) => setFilters({ ...filters, stage: e.target.value })}
-          className="px-4 py-2 border rounded-lg bg-white dark:bg-gray-800"
+          className="w-full sm:w-auto px-4 py-2 border rounded-lg bg-white dark:bg-gray-800"
         >
           <option value="">All Stages</option>
           <option value="shipment">Shipment</option>
@@ -99,13 +99,13 @@ export default function VehicleList() {
                 className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer"
                 onClick={() => navigate(`/dashboard/vehicles/${vehicle._id}`)}
               >
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold">
+                <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-bold break-words">
                       {vehicle.specifications?.year} {vehicle.specifications?.make} {vehicle.specifications?.model}
                     </h3>
                     <p className="text-sm text-gray-500">VIN: {vehicle.specifications?.vin || "N/A"}</p>
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex flex-wrap gap-2 mt-2">
                       <span className={`px-3 py-1 rounded text-sm font-medium ${stageColors[vehicle.status?.currentStage] || "bg-gray-100"}`}>
                         {vehicle.status?.currentStage || "unknown"}
                       </span>
@@ -114,7 +114,7 @@ export default function VehicleList() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 self-start sm:self-auto">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -139,18 +139,18 @@ export default function VehicleList() {
             ))}
           </div>
           
-          <div className="flex justify-center gap-2">
+          <div className="flex flex-col sm:flex-row justify-center gap-2">
             {page > 1 && (
               <button
                 onClick={() => setPage(page - 1)}
-                className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+                className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-100"
               >
                 Previous
               </button>
             )}
             <button
               onClick={() => setPage(page + 1)}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+              className="w-full sm:w-auto px-4 py-2 border rounded-lg hover:bg-gray-100"
             >
               Next
             </button>

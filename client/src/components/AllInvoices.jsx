@@ -117,7 +117,7 @@ const AllInvoices = ({ setGeneratedInvoice }) => {
       </h1>
 
       <div className="mb-6 flex items-center">
-        <div className="relative w-full max-w-md">
+        <div className="relative w-full max-w-full sm:max-w-md">
           <input
             type="text"
             placeholder="Search by consignee name or invoice number..."
@@ -137,18 +137,18 @@ const AllInvoices = ({ setGeneratedInvoice }) => {
             className="relative cursor-pointer border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 shadow-md hover:border-orange-500 hover:shadow-lg transition"
           >
             <div className="p-2 px-4 flex items-center border-b border-gray-200 dark:border-gray-700">
-              <div className="flex flex-row justify-between items-center w-full">
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center w-full">
                 {invoice.template?.company?.logo ? (
                   <img
                     src={invoice.template.company.logo}
                     alt="logo"
-                    className="w-16 h-16 mr-3 object-contain"
+                    className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                   />
                 ) : (
-                  <div className="w-10 h-10 mr-3 bg-gray-200 dark:bg-gray-600 rounded" />
+                  <div className="w-10 h-10 bg-gray-200 dark:bg-gray-600 rounded" />
                 )}
 
-                <div className="flex flex-row justify-end space-x-4 items-center w-full">
+                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:space-x-4 sm:items-center w-full">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(invoice.date).toLocaleDateString("en-GB")}
                   </span>
@@ -165,7 +165,7 @@ const AllInvoices = ({ setGeneratedInvoice }) => {
               </div>
             </div>
 
-            <div className="p-4 text-sm text-gray-500 space-y-1 min-h-48">
+            <div className="p-4 text-sm text-gray-500 space-y-1 min-h-0 sm:min-h-48">
               <div className="space-y-1">
                 <p className="font-semibold text-gray-800">
                   {invoice.invoiceDetails?.consigneeName || "No consignee name"}

@@ -38,7 +38,7 @@ function Layout() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
       {/* Mobile Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 shadow px-4 py-3 flex justify-between items-center">
         <img src={logo} alt="logo" className="h-6 dark:hidden" />
@@ -48,17 +48,26 @@ function Layout() {
         </button>
       </div>
 
+      {sidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation drawer"
+          className="md:hidden fixed inset-0 z-30 bg-black/40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <div
-        className={`fixed pt-10 md:pt-0 md:relative z-40 top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-md transform transition-transform duration-300 ${
+        className={`fixed md:relative z-40 top-0 left-0 h-full w-72 max-w-[85vw] bg-white dark:bg-gray-800 shadow-md transform transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
+        } md:translate-x-0 md:w-64`}
       >
         <div className="hidden md:block p-6 border-b border-gray-200 dark:border-gray-700">
           <img src={logo} alt="logo" className="max-w-32" />
         </div>
 
-        <nav className="mt-6">
+        <nav className="mt-16 md:mt-6">
           <ul>
             {menuItems.map((item) => (
               <li key={item.path}>
@@ -67,7 +76,7 @@ function Layout() {
                     navigate(item.path);
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center w-full px-6 py-3 text-left transition-all ${
+                  className={`flex items-center w-full px-5 md:px-6 py-3 text-left transition-all ${
                     location.pathname === item.path
                       ? "bg-orange-50 dark:bg-orange-900 text-orange-600 dark:text-orange-400 border-r-4 border-orange-600 dark:border-orange-400"
                       : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
@@ -81,7 +90,7 @@ function Layout() {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 w-full p-6">
+        <div className="absolute bottom-0 w-full p-6 bg-white dark:bg-gray-800">
           <button
             onClick={handleLogout}
             className="flex items-center text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400"
@@ -93,7 +102,7 @@ function Layout() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto p-8 pt-20 md:pt-8 bg-white dark:bg-gray-900">
+      <div className="flex-1 min-w-0 overflow-auto p-4 sm:p-6 md:p-8 pt-20 md:pt-8 bg-white dark:bg-gray-900">
         <Outlet />
       </div>
     </div>
